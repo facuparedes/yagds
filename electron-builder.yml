@@ -1,0 +1,12 @@
+appId: com.github.yagds
+productName: YAGDS
+copyright: null
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
