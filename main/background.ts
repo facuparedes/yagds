@@ -1,32 +1,36 @@
-import { app } from 'electron';
-import serve from 'electron-serve';
-import { createWindow } from './helpers';
+import { app, BrowserWindow, ipcMain } from "electron";
+import { createWindow, initSetup } from "./helpers";
+import config from "./config";
 
-const isProd: boolean = process.env.NODE_ENV === 'production';
+initSetup();
 
-if (isProd) {
-  serve({ directory: 'app' });
-} else {
-  app.setPath('userData', `${app.getPath('userData')} (development)`);
-}
+app
+  .once("ready", () =>
+    setTimeout(
+      async () => {
+        const mainWindow: BrowserWindow = createWindow("main", {
+          width: 1000,
+          height: 600,
+          show: false,
+          frame: false,
+          resizable: false,
+          maximizable: false,
+          fullscreenable: false,
+          webPreferences: { enableRemoteModule: true },
+        });
 
-(async () => {
-  await app.whenReady();
+        await mainWindow.once("ready-to-show", () => mainWindow.show()).loadURL(config.SERVER.ENV === "production" ? "app://./home.html" : `http://localhost:${process.argv[2]}/home`);
 
-  const mainWindow = createWindow('main', {
-    width: 1000,
-    height: 600,
-  });
+        // mainWindow.webContents.openDevTools();
 
-  if (isProd) {
-    await mainWindow.loadURL('app://./home.html');
-  } else {
-    const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/home`);
-    mainWindow.webContents.openDevTools();
-  }
-})();
-
-app.on('window-all-closed', () => {
-  app.quit();
-});
+        ipcMain
+          .on("isMaximizedEnabled", (e) => (e.returnValue = mainWindow.isMaximizable()))
+          .on("isMaximized", (e) => (e.returnValue = mainWindow.isMaximized()))
+          .on("switch-maximize-unmaximize", () => (!mainWindow.isMaximized() ? mainWindow.maximize() : mainWindow.unmaximize()))
+          .on("close", () => mainWindow.close())
+          .on("minimize", () => mainWindow.minimize());
+      },
+      process.platform == "linux" ? 1000 : 0
+    )
+  )
+  .on("window-all-closed", () => app.quit());

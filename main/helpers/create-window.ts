@@ -1,24 +1,18 @@
-import {
-  screen,
-  BrowserWindow,
-  BrowserWindowConstructorOptions,
-} from 'electron';
-import Store from 'electron-store';
+import { screen, BrowserWindowConstructorOptions } from "electron";
+import { BrowserWindow } from "glasstron";
+import Store from "electron-store";
 
 export default (windowName: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
-  const key = 'window-state';
+  const key = "window-state";
   const name = `window-state-${windowName}`;
   const store = new Store({ name });
-  const defaultSize = {
-    width: options.width,
-    height: options.height,
-  };
+  const defaultSize = { width: options.width, height: options.height };
   let state = {};
-  let win;
+  let win: BrowserWindow;
 
-  const restore = () => store.get(key, defaultSize);
+  const restore = () => store.get(key, defaultSize) as Electron.Rectangle;
 
-  const getCurrentPosition = () => {
+  const getCurrentPosition = (): Electron.Rectangle => {
     const position = win.getPosition();
     const size = win.getSize();
     return {
@@ -29,14 +23,8 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     };
   };
 
-  const windowWithinBounds = (windowState, bounds) => {
-    return (
-      windowState.x >= bounds.x &&
-      windowState.y >= bounds.y &&
-      windowState.x + windowState.width <= bounds.x + bounds.width &&
-      windowState.y + windowState.height <= bounds.y + bounds.height
-    );
-  };
+  const windowWithinBounds = (windowState: Electron.Rectangle, bounds: Electron.Rectangle) =>
+    windowState.x >= bounds.x && windowState.y >= bounds.y && windowState.x + windowState.width <= bounds.x + bounds.width && windowState.y + windowState.height <= bounds.y + bounds.height;
 
   const resetToDefaults = () => {
     const bounds = screen.getPrimaryDisplay().bounds;
@@ -46,30 +34,25 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     });
   };
 
-  const ensureVisibleOnSomeDisplay = windowState => {
-    const visible = screen.getAllDisplays().some(display => {
-      return windowWithinBounds(windowState, display.bounds);
-    });
-    if (!visible) {
-      // Window is partially or fully not visible now.
-      // Reset it to safe defaults.
-      return resetToDefaults();
-    }
+  const ensureVisibleOnSomeDisplay = (windowState: Electron.Rectangle) => {
+    const visible = screen.getAllDisplays().some((display) => windowWithinBounds(windowState, display.bounds));
+
+    // If window is partially or fully not visible,
+    // reset it to safe defaults.
+    if (!visible) return resetToDefaults();
     return windowState;
   };
 
   const saveState = () => {
-    if (!win.isMinimized() && !win.isMaximized()) {
-      Object.assign(state, getCurrentPosition());
-    }
+    if (!win.isMinimized() && !win.isMaximized()) Object.assign(state, getCurrentPosition());
     store.set(key, state);
   };
 
   state = ensureVisibleOnSomeDisplay(restore());
 
   const browserOptions: BrowserWindowConstructorOptions = {
-    ...options,
     ...state,
+    ...options,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -77,8 +60,10 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     },
   };
   win = new BrowserWindow(browserOptions);
+  win.blurType = "blurbehind";
+  win.setBlur(true);
 
-  win.on('close', saveState);
+  win.on("close", saveState);
 
   return win;
 };

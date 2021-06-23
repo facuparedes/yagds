@@ -1,0 +1,7 @@
+.makeDraggable {
+  -webkit-app-region: drag;
+}
+
+.removeDraggable {
+  -webkit-app-region: no-drag;
+}
