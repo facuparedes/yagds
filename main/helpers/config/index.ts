@@ -3,6 +3,7 @@ import { BrowserWindowConstructorOptions } from "electron";
 export default {
   SERVER: {
     ENV: process.env.NODE_ENV || "development",
+    OAUTH_CLIENTID: process.env.OAUTH_CLIENTID || "exampleexampleexampleexampleexampleexample.apps.googleusercontent.com",
   },
   __ELECTRON: {
     WindowOptions: <BrowserWindowConstructorOptions>{

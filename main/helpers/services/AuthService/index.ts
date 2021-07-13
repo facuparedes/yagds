@@ -1,11 +1,12 @@
 import { google } from "googleapis";
 import { WindowsService } from "..";
+import config from "../../config";
 
 const scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/drive"];
 
 const consoleError = (error: string) => console.error("Error:", error);
 
-export const oAuth2Client = new google.auth.OAuth2({ clientId: "490360998304-k7dc7l3s781mga5dpcpagip9sp64scbe.apps.googleusercontent.com", redirectUri: "http://localhost:8080/authorize" });
+export const oAuth2Client = new google.auth.OAuth2({ clientId: config.SERVER.OAUTH_CLIENTID, redirectUri: "http://localhost:8080/authorize" });
 
 oAuth2Client.on("tokens", (tokens) => {
   if (tokens.refresh_token)

@@ -1,15 +1,10 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 
-# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,git,node,react
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,git,node,react
+# Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,react,node,git,dotenv
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,visualstudiocode,react,node,git,dotenv
 
-## DEFAULT ##
-node_modules
-*.log
-.next
-app
-build
-
+### dotenv ###
+.env
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
@@ -99,7 +94,6 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
 .env.test
 .env.production
 
@@ -201,7 +195,14 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,git,node,react
+# End of https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,react,node,git,dotenv
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
+## DEFAULT ##
+node_modules
+*.log
+.next
+app
+build
+package-lock.json
