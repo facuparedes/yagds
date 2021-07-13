@@ -6,25 +6,31 @@
   "author": "github.com/facuparedes",
   "main": "app/background.js",
   "scripts": {
-    "dev": "nextron",
-    "build": "nextron build",
-    "postinstall": "electron-builder install-app-deps"
+    "dev": "set ANALYZE=false&&nextron",
+    "build": "set ANALYZE=false&&nextron build",
+    "postinstall": "electron-builder install-app-deps",
+    "analyze": "set ANALYZE=true&&nextron build"
   },
   "dependencies": {
     "@fluentui/react-icons": "^1.1.134",
+    "@next/bundle-analyzer": "^11.0.1",
+    "axios": "^0.21.1",
     "electron-serve": "^1.1.0",
-    "electron-store": "^7.0.2",
-    "glasstron": "^0.0.7",
-    "ts-mixer": "^5.4.1"
+    "electron-store": "^8.0.0",
+    "framer-motion": "^4.1.17",
+    "googleapis": "^80.1.0",
+    "react-notifications-component": "^3.1.0",
+    "simple-websocket": "^9.1.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.20",
+    "@types/node": "^16.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/simple-websocket": "^7.0.2",
     "autoprefixer": "^10.2.5",
-    "electron": "^12.0.2",
+    "electron": "^13.1.6",
     "electron-builder": "^22.10.5",
-    "next": "^10.1.3",
+    "next": "^11.0.1",
     "nextron": "^6.0.6",
     "postcss": "^8.2.9",
     "react": "^17.0.2",

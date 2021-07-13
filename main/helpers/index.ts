@@ -1,5 +1,5 @@
-import createWindow from "./create-window";
-import initSetup from "./initsetup";
-import BrowserWindow from "./customBrowserWindow";
+import loaders from "./loaders";
+import { WindowsService, AllWindowsType } from "./services";
 
-export { createWindow, initSetup, BrowserWindow };
+export { loaders, WindowsService };
+export type { AllWindowsType };
